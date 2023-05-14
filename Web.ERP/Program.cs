@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using DominCore.Entity;
 using Microsoft.AspNetCore.Identity;
 using Infrastructure.BL.Seeds;
+using System.Reflection;
+using Web.ERP.AutoMapperMaping;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,8 +43,18 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 //    options.Password.RequireNonAlphanumeric = false;//mch lazm tkon 7rof bs 
 //    options.Password.RequiredUniqueChars = 0;
 //});
-    
+
+
+
+
+//inject auto mapper
+
+builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(MappingProfile)));
+
+
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
