@@ -1,6 +1,7 @@
 ﻿using DominCore.IServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Web.ERP.ViewModels;
 
 namespace Web.ERP.Services
 {
@@ -13,7 +14,7 @@ namespace Web.ERP.Services
             _roleManager = roleManager;
             _mapper = mapper;
         }
-
+       
         public async Task<bool> Delete(string Id)
         {
             try
@@ -30,7 +31,7 @@ namespace Web.ERP.Services
             }
         }
 
-        public Task<RoleModel> FindById(string id)
+        public async Task<RoleModel> FindById(string id)
         {
             throw new NotImplementedException();
         }
@@ -51,6 +52,12 @@ namespace Web.ERP.Services
             }
         }
 
+        public async Task<bool> RoleExistsAsync(RoleModel entity)
+        {
+            if (await _roleManager.RoleExistsAsync(entity.RoleName)) 
+                return true;
+            return false;
+        }
         public async Task<bool> Save(RoleModel entity)
         {
             try
@@ -58,7 +65,7 @@ namespace Web.ERP.Services
                 if (entity is null) return false;
                 if(entity.RoleId is null)//save
                 {
-                    if(await _roleManager.RoleExistsAsync(entity.RoleName)) return false;
+                   
                     entity.RoleId = Guid.NewGuid().ToString();
                     var Result = _mapper.Map(entity, new IdentityRole());//3mlt mapping 
                     var role = await _roleManager.CreateAsync(Result);//hna 3mlt create 
@@ -84,5 +91,15 @@ namespace Web.ERP.Services
                 throw;
             }
         }
+
+        //Task<bool> IServices<RoleModel>.RoleExistsAsync(RoleModel entity)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //Task IServices<RoleModel>.Delete(string Id)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

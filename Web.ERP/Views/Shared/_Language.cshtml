@@ -1,13 +1,45 @@
-﻿<li class="dropdown dropdown-language nav-item">
-    <a class="dropdown-toggle nav-link" id="dropdown-flag" href="#" data-toggle="dropdown"
-       aria-haspopup="true" aria-expanded="false">
-        <i class="flag-icon flag-icon-sa"></i><span class="selected-language">Arabic</span>
-    </a>
-    <div class="dropdown-menu" aria-labelledby="dropdown-flag">
-        <a class="dropdown-item"
-           href="#" data-language="fr"><i class="flag-icon flag-icon-sa"></i> Arabic</a>
-        <a class="dropdown-item" href="#" data-language="en">
-            <i class="flag-icon flag-icon-us"></i> English
-        </a>
-    </div>
+﻿@using Microsoft.AspNetCore.Localization;
+
+@{
+    var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "~/" : $"~{Context.Request.Path.Value}";
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+}
+
+@*.3yza ageb url 3ndna // ?? if path da rage3 b null rag3ny home page else hatly value bta3 path.*@
+
+<form asp-controller="Languages" asp-action="SelectLanguage" asp-route-returnUrl="@returnUrl">
+
+<li class="dropdown dropdown-language nav-item">
+
+   @if(requestCulture!.RequestCulture.UICulture.Name == "ar")
+            {
+                 <a class="dropdown-toggle nav-link" id="dropdown-flag" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                 <i class="flag-icon flag-icon-sa"></i>
+                 <span class="selected-language">Arabic</span>
+                </a>
+            }
+
+            else
+            {
+                <a class="dropdown-toggle nav-link" id="dropdown-flag" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="flag-icon flag-icon-us"></i>
+                    <span class="selected-language">English</span>
+                </a>
+    
+            }
+
+            
+            <div class="dropdown-menu" aria-labelledby="dropdown-flag">
+
+            <button class="dropdown-item" value="ar" name="culture" href="#" data-language="ar">
+                 <i class="flag-icon flag-icon-sa"></i> Arabic
+                 </button>
+
+            <button class="dropdown-item" value="en" name="culture" href="#" data-language="en">
+                 <i class="flag-icon flag-icon-us"></i> English
+                 </button>
+
+            </div>
 </li>
+
+    </form>

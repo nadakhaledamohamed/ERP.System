@@ -1,4 +1,7 @@
-﻿namespace Web.ERP.ViewModels
+﻿using DominCore.IServices;
+using System.ComponentModel.DataAnnotations;
+
+namespace Web.ERP.ViewModels
 {
     public class RoleViewModel
     {
@@ -7,7 +10,10 @@
     }
     public class RoleModel
     {
+
         public string? RoleId { get; set; }
+        [Display(Name = "lbRoleName")]
+        [Required(ErrorMessage ="lbEnter.RoleName")]
         public string RoleName { get; set; } = string.Empty;
     }
 }

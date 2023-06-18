@@ -1,0 +1,233 @@
+﻿@using DominCore.Constants;
+@model RoleViewModel;
+@{
+    ViewData["Title"] = "Roles";
+}
+
+
+<div class="content-header row">
+    <div class="content-header-left col-md-9 col-12 mb-2">
+        <div class="row breadcrumbs-top">
+            <div class="col-12">
+                <h2 class="content-header-title float-left mb-0"></h2>
+                <div class="breadcrumb-wrapper col-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/">@Loc["lbHome"]</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            @Loc["lbGroupRole"]
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<!-- users list start -->
+<section class="users-list-wrapper">
+</section>
+<!-- Data list view starts -->
+<section id="data-list-view" class="data-list-view-header">
+    <form asp-controller="Accounts" asp-action="DeleteRoleSelected" id="Submit-Form">
+
+        <div class="action-btns">
+            <div class="btn-dropdown d-inline mr-1 mb-1">
+                <div class="btn-group dropdown actions-dropodown">
+                    <button type="button" class="btn btn-info action-add Reset">
+                        <i class="feather icon-plus"> </i> @Loc["lbbtnSave"]
+                    </button>
+                    &nbsp;
+                    <button type="button"
+                            class="btn btn-primary px-1 py-1 dropdown-toggle waves-effect waves-light"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        @Loc["lbProcedures"]
+                    </button>
+                    <div class="dropdown-menu">
+                        <button class="dropdown-item text-danger" id="btn-DeleteAll" type="submit"><i class="feather icon-trash"></i>@Loc["lbDelete"]</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- DataTable starts -->
+        <div class="table-responsive" style="margin-top:-25px ">
+            <table class="table data-list-view ">
+                <thead>
+                    <tr>
+                        <td>
+                            <fieldset class="checkbox">
+                                <div class="vs-checkbox-con vs-checkbox-primary">
+                                    <input type="checkbox" id="selectAll">
+                                    <span class="vs-checkbox">
+                                        <span class="vs-checkbox--check">
+                                            <i class="vs-icon feather icon-check"></i>
+                                        </span>
+                                    </span>
+                                </div>
+                            </fieldset>
+                        </td>
+                        <th>@Loc["lbRoleName"]</th>
+                        <th>@Loc["lbEvents"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var role in Model.Roles)
+                    {
+
+                        <tr>
+                            <td>
+                                <fieldset class="checkbox">
+                                    <div class="vs-checkbox-con vs-checkbox-primary">
+                                        <input type="checkbox" value="@role.RoleId" name="Selected">
+
+                                        <span class="vs-checkbox">
+                                            <span class="vs-checkbox--check">
+                                                <i class="vs-icon feather icon-check"></i>
+                                            </span>
+                                        </span>
+                                    </div>
+                                </fieldset>
+                            </td>
+
+
+                            @switch (role.RoleName)
+                            {
+                                case Helper.FullOwner:
+                                    <td>
+                                        <div class="chip chip-danger w-75">
+                                            <div class="chip-body">
+                                                <div class="chip-text">@role.RoleName</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    break;
+
+                                case Helper.OwnerCompany:
+                                    <td>
+                                        <div class="chip chip-info w-75">
+                                            <div class="chip-body">
+                                                <div class="chip-text">@role.RoleName</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    break;
+
+                                case Helper.BranchManager:
+                                    <td>
+                                        <div class="chip chip-success w-75">
+                                            <div class="chip-body">
+                                                <div class="chip-text">@role.RoleName</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    break;
+                                default:
+                                    <td>
+                                        <div class="chip chip-warning w-75">
+                                            <div class="chip-body">
+                                                <div class="chip-text">@role.RoleName</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    break;
+                            }
+
+                            <td class="product-action">
+                                <!-- Button trigger modal -->
+
+                                <a class="action-edit" href="#" onclick="onEdit(@Model.Roles.IndexOf(role))"><i class="feather icon-edit"></i></a>
+
+                                <a class="action-delete" href="#" onclick="onDelete('@role.RoleId')">
+                                    <i class="feather icon-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+        <!-- DataTable ends -->
+    </form>
+    <!-- add new sidebar starts -->
+    <div class="add-new-data-sidebar">
+        <div class="overlay-bg"></div>
+        <div class="add-new-data">
+            <div class="div mt-2 px-2 d-flex new-data-title justify-content-between">
+                <div>
+                    <h4 class="text-uppercase">@Loc["lbAddGroupRole"]</h4>
+                </div>
+                <div class="hide-data-sidebar">
+                    <i class="feather icon-x"></i>
+                </div>
+            </div>
+
+            <form asp-controller="Accounts" asp-action="SavRole" method="post">
+
+
+                <div class="data-items pb-3">
+                    <div class="data-fields px-2 mt-3">
+                        <div class="row">
+                            <input hidden asp-for="NewRole.RoleId" id="roleId" />
+                            <div class="col-sm-12 data-field-col">
+                                <label asp-for="NewRole.RoleName"></label>
+                                <input asp-for="NewRole.RoleName" class="form-control" id="roleName" />
+                                <span asp-validation-for="NewRole.RoleName" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="add-data-footer d-flex justify-content-around px-3 mt-2">
+                    <div class="add-data-btn">
+                        <button type="submit" class="btn btn-primary">@Loc["lbbtnSave"]</butto>
+                    </div>
+                    <div class="cancel-data-btn">
+                        @* <button class="btn btn-outline-danger">الغاء</button>*@
+                        <a class="btn btn-outline-danger">@Loc["lbCancel"]</a>
+                       
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- add new sidebar ends -->
+</section>
+<!-- Data list view end -->
+@section Scripts{
+   
+    @if (!string.IsNullOrEmpty(Context.Session.GetString(Helper.msgType)))
+    {
+        if (Context.Session.GetString(Helper.msgType) == Helper.Success)//lw mch fdya htd5ol 3la if tanya de
+        {
+            <script>
+                toastr.success('@Html.Raw(Context.Session.GetString(Helper.msg))', '@Loc["lbSave"]');
+            </script>
+        }
+        else
+        {
+            <script>
+                toastr.error('@Html.Raw(Context.Session.GetString(Helper.msg))', '@Loc["lbNotSaved"]');
+            </script>
+        }
+        Context.Session.SetString(Helper.msgType ,"");
+    }
+
+    <script src="~/Modules/Roles.js"></script>
+    <partial name="_ValidationScriptsPartial"/>
+    <script>
+
+        let roles = @Html.Raw(Json.Serialize(Model.Roles));
+    </script>
+}

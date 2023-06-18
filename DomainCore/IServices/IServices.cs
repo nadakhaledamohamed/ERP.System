@@ -10,9 +10,9 @@ namespace DominCore.IServices
     {
         //methods that we are going to use 
         Task<List<T>> GetAll();
-        Task<T> FindById(int id);
+        Task<T> FindById(string Id);
         Task<bool> Save(T entity);
-        Task Delete(string Id);
-        
+        Task <bool> Delete(string Id);
+        Task<bool> RoleExistsAsync(T entity);
     }
 }

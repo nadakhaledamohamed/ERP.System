@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Identity;
 using Infrastructure.BL.Seeds;
 using System.Reflection;
 using Web.ERP.AutoMapperMaping;
+using DominCore.IServices;
+using Web.ERP.Services;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Web.ERP.Languages;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +35,21 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 
 
 
+//Language
+builder.Services.AddSingleton<ResourceWebServices>();//AddSingleton is a generic service collection 
+builder.Services.AddLocalization(options => options.ResourcesPath="Resources");
+builder.Services.AddMvc().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+    .AddDataAnnotationsLocalization(options =>
+    {
+        options.DataAnnotationLocalizerProvider = (type, factory) =>
+        {
+            var assemblyName = new AssemblyName(typeof(ResourceWeb).GetTypeInfo().Assembly.FullName!);
+            return factory.Create("ResourceWeb",assemblyName.Name!);
+            
+        };
+    });
+
+
 
 
 //builder.Services.Configure<IdentityOptions>(options =>
@@ -48,9 +67,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 
 
 //inject auto mapper
-
+builder.Services.AddSession();
 builder.Services.AddAutoMapper(Assembly.GetAssembly(typeof(MappingProfile)));
 
+builder.Services.AddScoped<IServices<RoleModel>, ServicesRoles>();
 
 var app = builder.Build();
 
@@ -68,8 +88,18 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseSession();
 
 app.UseAuthorization();
+
+//Language 
+var SupportedCulter = new[] { "ar", "en" };
+app.UseRequestLocalization(new RequestLocalizationOptions()
+    .SetDefaultCulture(SupportedCulter[0])
+    .AddSupportedCultures(SupportedCulter)
+    .AddSupportedUICultures(SupportedCulter)
+    );
+    
 
 
 

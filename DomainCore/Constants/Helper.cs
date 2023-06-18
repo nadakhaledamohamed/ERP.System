@@ -35,7 +35,11 @@ namespace DominCore.Constants
 
         public const string MainBranch = "الفرع الرئيسى ";
         public const string EmailMainBranch = "MainBranch@app.com";
-
+        //MsgType
+        public const string msgType = "msgType";
+        public const string msg = "msg";
+        public const string Success = "Success";
+        public const string Error = "Error";
 
         public const string DefaultUsers  = "DefaultUser.jpg";
 

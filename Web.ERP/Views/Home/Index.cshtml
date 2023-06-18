@@ -1,4 +1,10 @@
-﻿@{
+﻿@*@using Microsoft.AspNetCore.Mvc.Localization;//mch m7taga da 5las h3ml inject lel serices ely 3ndy 
+@inject IViewLocalizer Loc*@
+
+@using Web.ERP.Languages;
+@inject ResourceWebServices Loc
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -7,7 +13,7 @@
                     <!-- users filter start -->
                     <div class="card">
                         <div class="card-header pb-2">
-                            <h4 class="card-title">الفلتر</h4>
+            <h4 class="card-title">@Loc["LbFilter"]</h4>
                             <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
                             <div class="heading-elements">
                                 <ul class="list-inline mb-0">
@@ -85,10 +91,14 @@
                     <div class="action-btns">
                         <div class="btn-dropdown d-inline mr-1 mb-1">
                             <div class="btn-group dropdown actions-dropodown">
-                                <a href="/Accounts/Register" class="btn btn-info action-add">
-                                    <i class='feather icon-plus'></i>
+                                @*<a href="/Accounts/Register" class="btn btn-info action-add">*@
+                                  @*  <i class='feather icon-plus'></i>
                                     حفظ جديد
-                                </a>&nbsp;
+                                </a>*@
+                                <button type="button" class="btn btn-info action-add">
+                                  <i class="feather icon-plus"> </i> حفظ جديد
+                                     </button>
+                                &nbsp;
                                 <button type="button"
                                         class="btn btn-primary px-1 py-1 dropdown-toggle waves-effect waves-light"
                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
